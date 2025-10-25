@@ -1,25 +1,32 @@
 import { useState } from "react";
 import CodeEditor from "@/components/CodeEditor";
 import AIChat from "@/components/AIChat";
+import VisualizationPanel from "@/components/VisualizationPanel";
 import { Code2, Sparkles } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const Index = () => {
   const [codeContext, setCodeContext] = useState<string>();
+  const [currentCode, setCurrentCode] = useState<string>("");
   const { toast } = useToast();
 
   const handleAnalyzeCode = (code: string) => {
     setCodeContext(code);
+    setCurrentCode(code);
     toast({
       title: "Code Analysis",
       description: "AI is analyzing your code...",
     });
   };
 
+  const handleCodeChange = (code: string) => {
+    setCurrentCode(code);
+  };
+
   const handleRunCode = () => {
     toast({
-      title: "Code Execution",
-      description: "Code execution is not yet implemented in this demo.",
+      title: "Visualization Updated",
+      description: "Check the visualization panel for results",
     });
   };
 
@@ -51,17 +58,26 @@ const Index = () => {
 
       {/* Main Content */}
       <main className="flex-1 container mx-auto p-4 overflow-hidden">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 h-full">
-          {/* Code Editor - Takes 2/3 on large screens */}
-          <div className="lg:col-span-2 h-full min-h-[400px]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 h-full">
+          {/* Code Editor - Takes 5/12 on large screens */}
+          <div className="lg:col-span-5 h-full min-h-[400px]">
             <CodeEditor
               onAnalyzeCode={handleAnalyzeCode}
               onRunCode={handleRunCode}
+              onCodeChange={handleCodeChange}
             />
           </div>
 
-          {/* AI Chat - Takes 1/3 on large screens */}
-          <div className="lg:col-span-1 h-full min-h-[400px]">
+          {/* Visualization Panel - Takes 4/12 on large screens */}
+          <div className="lg:col-span-4 h-full min-h-[400px]">
+            <VisualizationPanel
+              code={currentCode}
+              onExecute={handleRunCode}
+            />
+          </div>
+
+          {/* AI Chat - Takes 3/12 on large screens */}
+          <div className="lg:col-span-3 h-full min-h-[400px]">
             <AIChat codeContext={codeContext} />
           </div>
         </div>

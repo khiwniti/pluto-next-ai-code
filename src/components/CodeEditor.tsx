@@ -6,18 +6,36 @@ import { Code2, Play, Sparkles } from "lucide-react";
 interface CodeEditorProps {
   onAnalyzeCode: (code: string) => void;
   onRunCode: () => void;
+  onCodeChange?: (code: string) => void;
 }
 
-const CodeEditor = ({ onAnalyzeCode, onRunCode }: CodeEditorProps) => {
-  const [code, setCode] = useState(`// Welcome to AI Code Editor
-// Start typing and get AI-powered assistance
+const CodeEditor = ({ onAnalyzeCode, onRunCode, onCodeChange }: CodeEditorProps) => {
+  const [code, setCode] = useState(`// AI Code Editor with Plotly Visualization
+// Try keywords: heatmap, 3d, surface, scatter
 
-function fibonacci(n) {
-  if (n <= 1) return n;
-  return fibonacci(n - 1) + fibonacci(n - 2);
+// Example 1: Heatmap
+function generateHeatmap() {
+  const size = 20;
+  const data = [];
+  
+  for (let i = 0; i < size; i++) {
+    const row = [];
+    for (let j = 0; j < size; j++) {
+      row.push(Math.sin(i/2) * Math.cos(j/2) * 10);
+    }
+    data.push(row);
+  }
+  
+  return data;
 }
 
-console.log(fibonacci(10));
+// Example 2: 3D Surface
+function generate3DSurface() {
+  const size = 30;
+  return "3d surface plot";
+}
+
+console.log("Ready for visualization!");
 `);
   
   const [language, setLanguage] = useState("javascript");
@@ -25,6 +43,7 @@ console.log(fibonacci(10));
   const handleEditorChange = (value: string | undefined) => {
     if (value !== undefined) {
       setCode(value);
+      onCodeChange?.(value);
     }
   };
 
