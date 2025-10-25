@@ -10,32 +10,55 @@ interface CodeEditorProps {
 }
 
 const CodeEditor = ({ onAnalyzeCode, onRunCode, onCodeChange }: CodeEditorProps) => {
-  const [code, setCode] = useState(`// AI Code Editor with Plotly Visualization
-// Try keywords: heatmap, 3d, surface, scatter
+  const [code, setCode] = useState(`// Engineering Simulation: Stress Distribution Analysis
+// Finite Element Analysis (FEA) for structural components
 
-// Example 1: Heatmap
-function generateHeatmap() {
-  const size = 20;
-  const data = [];
+// Material Properties
+const materialProperties = {
+  youngsModulus: 200e9,  // Pa (Steel)
+  poissonRatio: 0.3,
+  density: 7850,         // kg/m³
+  yieldStrength: 250e6   // Pa
+};
+
+// Mesh Generation: 2D Plate Element
+function generateStressField(nx, ny) {
+  const stressData = [];
   
-  for (let i = 0; i < size; i++) {
-    const row = [];
-    for (let j = 0; j < size; j++) {
-      row.push(Math.sin(i/2) * Math.cos(j/2) * 10);
+  // Applied load: 100 MPa tension
+  const appliedLoad = 100e6;
+  
+  for (let i = 0; i < nx; i++) {
+    for (let j = 0; j < ny; j++) {
+      const x = i / (nx - 1);
+      const y = j / (ny - 1);
+      
+      // Von Mises stress distribution
+      // Stress concentration near hole/notch
+      const r = Math.sqrt((x - 0.5)**2 + (y - 0.5)**2);
+      const stressConcentration = 1 + 2 * Math.exp(-r * 10);
+      const vonMisesStress = appliedLoad * stressConcentration;
+      
+      stressData.push({
+        x: x,
+        y: y,
+        stress: vonMisesStress / 1e6,  // Convert to MPa
+        safetyFactor: materialProperties.yieldStrength / vonMisesStress
+      });
     }
-    data.push(row);
   }
   
-  return data;
+  return stressData;
 }
 
-// Example 2: 3D Surface
-function generate3DSurface() {
-  const size = 30;
-  return "3d surface plot";
-}
+// Run FEA simulation
+const results = generateStressField(30, 30);
+const maxStress = Math.max(...results.map(r => r.stress));
+const minSafetyFactor = Math.min(...results.map(r => r.safetyFactor));
 
-console.log("Ready for visualization!");
+console.log(\`Max Stress: \${maxStress.toFixed(2)} MPa\`);
+console.log(\`Min Safety Factor: \${minSafetyFactor.toFixed(2)}\`);
+console.log("Stress analysis complete - visualize results");
 `);
   
   const [language, setLanguage] = useState("javascript");

@@ -11,59 +11,117 @@ import type { FileNode } from "@/components/FileTree";
 const Index = () => {
   const [codeContext, setCodeContext] = useState<string>();
   const [currentCode, setCurrentCode] = useState<string>("");
-  const [selectedFile, setSelectedFile] = useState<string>("/examples/heatmap.js");
+  const [selectedFile, setSelectedFile] = useState<string>("/simulations/structural-analysis/stress-distribution.js");
   const { toast } = useToast();
 
-  // Sample file structure
+  // Engineering simulation file structure
   const [fileStructure] = useState<FileNode[]>([
     {
-      name: "examples",
+      name: "simulations",
       type: "folder",
-      path: "/examples",
+      path: "/simulations",
       children: [
         {
-          name: "heatmap.js",
-          type: "file",
-          path: "/examples/heatmap.js",
+          name: "structural-analysis",
+          type: "folder",
+          path: "/simulations/structural-analysis",
+          children: [
+            {
+              name: "stress-distribution.js",
+              type: "file",
+              path: "/simulations/structural-analysis/stress-distribution.js",
+            },
+            {
+              name: "beam-deflection.js",
+              type: "file",
+              path: "/simulations/structural-analysis/beam-deflection.js",
+            },
+            {
+              name: "modal-analysis.js",
+              type: "file",
+              path: "/simulations/structural-analysis/modal-analysis.js",
+            },
+          ],
         },
         {
-          name: "3d-surface.js",
-          type: "file",
-          path: "/examples/3d-surface.js",
+          name: "thermal-analysis",
+          type: "folder",
+          path: "/simulations/thermal-analysis",
+          children: [
+            {
+              name: "heat-transfer.js",
+              type: "file",
+              path: "/simulations/thermal-analysis/heat-transfer.js",
+            },
+            {
+              name: "temperature-field.js",
+              type: "file",
+              path: "/simulations/thermal-analysis/temperature-field.js",
+            },
+          ],
         },
         {
-          name: "scatter.js",
-          type: "file",
-          path: "/examples/scatter.js",
+          name: "fluid-dynamics",
+          type: "folder",
+          path: "/simulations/fluid-dynamics",
+          children: [
+            {
+              name: "velocity-field.js",
+              type: "file",
+              path: "/simulations/fluid-dynamics/velocity-field.js",
+            },
+            {
+              name: "pressure-contour.js",
+              type: "file",
+              path: "/simulations/fluid-dynamics/pressure-contour.js",
+            },
+          ],
         },
       ],
     },
     {
-      name: "projects",
+      name: "materials",
       type: "folder",
-      path: "/projects",
+      path: "/materials",
       children: [
         {
-          name: "my-visualization.js",
+          name: "steel-properties.js",
           type: "file",
-          path: "/projects/my-visualization.js",
+          path: "/materials/steel-properties.js",
         },
         {
-          name: "data-analysis",
-          type: "folder",
-          path: "/projects/data-analysis",
-          children: [
-            {
-              name: "index.js",
-              type: "file",
-              path: "/projects/data-analysis/index.js",
-            },
-            {
-              name: "utils.js",
-              type: "file",
-              path: "/projects/data-analysis/utils.js",
-            },
-          ],
+          name: "aluminum-alloy.js",
+          type: "file",
+          path: "/materials/aluminum-alloy.js",
+        },
+      ],
+    },
+    {
+      name: "mesh-generation",
+      type: "folder",
+      path: "/mesh-generation",
+      children: [
+        {
+          name: "structured-mesh.js",
+          type: "file",
+          path: "/mesh-generation/structured-mesh.js",
+        },
+        {
+          name: "adaptive-refinement.js",
+          type: "file",
+          path: "/mesh-generation/adaptive-refinement.js",
+        },
+      ],
+    },
+    {
+      name: "post-processing",
+      type: "folder",
+      path: "/post-processing",
+      children: [
+        {
+          name: "results-export.js",
+          type: "file",
+          path: "/post-processing/results-export.js",
         },
       ],
     },
@@ -140,9 +198,9 @@ const Index = () => {
                   </div>
                   <div>
                     <h1 className="text-lg font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                      AI Code Editor
+                      Engineering Simulation IDE
                     </h1>
-                    <p className="text-xs text-muted-foreground">Powered by AI Intelligence</p>
+                    <p className="text-xs text-muted-foreground">FEA • CFD • Thermal Analysis</p>
                   </div>
                 </div>
                 

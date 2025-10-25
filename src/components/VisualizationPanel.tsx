@@ -29,18 +29,36 @@ const VisualizationPanel = ({ code, onExecute }: VisualizationPanelProps) => {
   }, []);
 
   const generateDefaultVisualization = () => {
-    // Create sample heatmap-style scatter data
+    // Engineering simulation: Stress distribution heatmap
     const data: any[] = [];
-    const size = 20;
+    const size = 30;
+    
+    // Simulate stress concentration around a circular hole
+    const centerX = size / 2;
+    const centerY = size / 2;
+    const holeRadius = size / 6;
     
     for (let i = 0; i < size; i++) {
       for (let j = 0; j < size; j++) {
-        const value = Math.sin(i / 2) * Math.cos(j / 2) * 10;
+        const dx = i - centerX;
+        const dy = j - centerY;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        // Stress concentration factor around hole
+        let stress;
+        if (distance < holeRadius) {
+          stress = 0; // No stress inside hole
+        } else {
+          // Stress increases near hole boundary
+          const stressConcentration = 1 + (holeRadius * holeRadius) / (distance * distance);
+          stress = 100 * stressConcentration; // Base stress 100 MPa
+        }
+        
         data.push({
           x: i,
           y: j,
-          z: value,
-          value: Math.abs(value),
+          z: Math.min(stress, 300), // Cap at 300 MPa for visualization
+          value: Math.min(stress / 30, 10), // Normalize for color scale
         });
       }
     }
@@ -50,29 +68,29 @@ const VisualizationPanel = ({ code, onExecute }: VisualizationPanelProps) => {
   };
 
   const executeCodeVisualization = () => {
-    try {
-      if (code.includes("heatmap")) {
+      try {
+      if (code.includes("heatmap") || code.includes("stress") || code.includes("strain")) {
         generateDefaultVisualization();
         toast({
-          title: "Visualization Updated",
-          description: "Heatmap generated successfully",
+          title: "Stress Analysis Complete",
+          description: "Von Mises stress distribution generated",
         });
-      } else if (code.includes("3d") || code.includes("surface")) {
+      } else if (code.includes("3d") || code.includes("thermal") || code.includes("temperature")) {
         generate3DVisualization();
         toast({
-          title: "Visualization Updated",
-          description: "3D-style plot generated successfully",
+          title: "Thermal Analysis Complete",
+          description: "Temperature field distribution generated",
         });
-      } else if (code.includes("scatter")) {
+      } else if (code.includes("scatter") || code.includes("fluid") || code.includes("velocity")) {
         generateScatterPlot();
         toast({
-          title: "Visualization Updated",
-          description: "Scatter plot generated successfully",
+          title: "Fluid Dynamics Complete",
+          description: "Velocity field visualization generated",
         });
       } else {
         toast({
-          title: "No visualization detected",
-          description: "Try adding 'heatmap', '3d', or 'scatter' to your code",
+          title: "Run Simulation",
+          description: "Add keywords: stress, thermal, or fluid to your code",
           variant: "destructive",
         });
       }
@@ -89,21 +107,26 @@ const VisualizationPanel = ({ code, onExecute }: VisualizationPanelProps) => {
   };
 
   const generate3DVisualization = () => {
-    // Create 3D-style scatter data with depth
+    // Thermal analysis: Temperature distribution in 3D
     const data: any[] = [];
-    const size = 30;
+    const size = 35;
+    const hotspotX = size * 0.3;
+    const hotspotY = size * 0.5;
 
     for (let i = 0; i < size; i++) {
       for (let j = 0; j < size; j++) {
-        const x = (i - size/2) / 5;
-        const y = (j - size/2) / 5;
-        const z = Math.sin(Math.sqrt(x*x + y*y)) * 10;
+        const dx = i - hotspotX;
+        const dy = j - hotspotY;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        // Heat dissipation from hotspot (thermal conduction)
+        const temperature = 100 * Math.exp(-distance / 10) + 20; // Base temp 20°C
         
         data.push({
           x: i,
           y: j,
-          z: Math.abs(z),
-          value: Math.abs(z),
+          z: temperature,
+          value: temperature / 10,
         });
       }
     }
@@ -113,18 +136,25 @@ const VisualizationPanel = ({ code, onExecute }: VisualizationPanelProps) => {
   };
 
   const generateScatterPlot = () => {
-    // Create random scatter data
-    const n = 100;
+    // Fluid dynamics: Velocity vectors/particles
+    const n = 150;
     const data: any[] = [];
 
     for (let i = 0; i < n; i++) {
       const x = Math.random() * 100;
-      const y = x * 2 + Math.random() * 20;
+      const y = Math.random() * 100;
+      
+      // Simulate flow around obstacle at center
+      const dx = x - 50;
+      const dy = y - 50;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      const velocity = Math.max(0, 10 - distance / 5); // m/s
+      
       data.push({
         x,
         y,
-        z: x,
-        value: x / 10,
+        z: velocity * 10, // Scale for visualization
+        value: velocity,
       });
     }
 
