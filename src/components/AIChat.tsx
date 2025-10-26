@@ -20,7 +20,7 @@ const AIChat = ({ codeContext }: AIChatProps) => {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content: "Hello! I'm your AI coding assistant. I can help you understand code, fix errors, suggest improvements, and answer programming questions. How can I help you today?",
+      content: "🤖 Agentic AI Engineering Assistant initialized.\n\nI can autonomously:\n• Analyze FEA/CFD simulations\n• Optimize mesh configurations\n• Validate material properties\n• Suggest solver improvements\n• Execute multi-step engineering workflows\n\nHow can I assist with your simulation today?",
       timestamp: new Date(),
     },
   ]);
@@ -56,6 +56,7 @@ const AIChat = ({ codeContext }: AIChatProps) => {
             { role: "user", content: input },
           ],
           codeContext,
+          agentMode: true, // Enable agentic reasoning
         },
       });
 
@@ -91,8 +92,15 @@ const AIChat = ({ codeContext }: AIChatProps) => {
     <div className="flex flex-col h-full bg-card border border-border rounded-lg overflow-hidden">
       {/* Header */}
       <div className="flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-primary to-accent border-b border-border">
-        <Sparkles className="w-5 h-5 text-primary-foreground" />
-        <h2 className="font-semibold text-primary-foreground">AI Assistant</h2>
+        <Sparkles className="w-5 h-5 text-primary-foreground animate-pulse" />
+        <div className="flex-1">
+          <h2 className="font-semibold text-primary-foreground">Agentic AI</h2>
+          <p className="text-xs text-primary-foreground/80">Autonomous Engineering Agent</p>
+        </div>
+        <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-primary-foreground/20">
+          <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+          <span className="text-xs text-primary-foreground">Active</span>
+        </div>
       </div>
 
       {/* Messages */}
@@ -152,7 +160,7 @@ const AIChat = ({ codeContext }: AIChatProps) => {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="Ask me anything about your code..."
+            placeholder="Ask me to analyze simulations, optimize parameters, or plan engineering workflows..."
             className="resize-none bg-background border-border focus:ring-primary"
             rows={2}
             disabled={isLoading}

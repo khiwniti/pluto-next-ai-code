@@ -12,17 +12,45 @@ serve(async (req) => {
   }
 
   try {
-    const { messages, codeContext } = await req.json();
+    const { messages, codeContext, agentMode = false } = await req.json();
+    console.log('Received request - Agent Mode:', agentMode, 'Messages:', messages.length);
+
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
 
     if (!LOVABLE_API_KEY) {
       throw new Error('LOVABLE_API_KEY is not configured');
     }
 
-    // Build system prompt with code context if provided
-    const systemPrompt = codeContext
-      ? `You are an expert programming assistant. The user is working on this code:\n\n${codeContext}\n\nProvide helpful, clear, and concise coding advice. Explain concepts when asked, suggest improvements, help debug errors, and answer programming questions.`
-      : `You are an expert programming assistant. Provide helpful, clear, and concise coding advice. Explain concepts when asked, suggest improvements, help debug errors, and answer programming questions.`;
+    // Build agentic system prompt for engineering simulations
+    let systemPrompt = `You are an advanced Agentic AI Engineering Assistant with autonomous reasoning capabilities. Your role is to:
+
+1. ANALYZE: Deeply analyze engineering simulations (FEA, CFD, thermal analysis)
+2. REASON: Use multi-step reasoning to identify optimization opportunities
+3. PLAN: Create actionable plans to improve simulation accuracy and performance
+4. EXECUTE: Provide concrete code improvements and parameter recommendations
+
+You have expertise in:
+- Finite Element Analysis (FEA) and structural mechanics
+- Computational Fluid Dynamics (CFD)
+- Thermal analysis and heat transfer
+- Material science and engineering materials
+- Mesh generation and optimization
+- Numerical methods and convergence analysis
+
+When analyzing code:
+- Think step-by-step about the simulation physics
+- Identify potential numerical stability issues
+- Suggest mesh refinement strategies
+- Recommend optimal solver parameters
+- Validate boundary conditions and material properties
+
+You operate autonomously, breaking down complex engineering problems into manageable sub-tasks and providing comprehensive solutions.`;
+    
+    if (codeContext) {
+      systemPrompt += `\n\n=== CURRENT SIMULATION CODE ===\n\`\`\`javascript\n${codeContext}\n\`\`\`\n\n=== END CODE CONTEXT ===`;
+    }
+
+    console.log('Calling Lovable AI with model: google/gemini-2.5-pro');
 
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
@@ -31,13 +59,13 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'google/gemini-2.5-flash',
+        model: 'google/gemini-2.5-pro', // Best for complex reasoning and multimodal tasks
         messages: [
           { role: 'system', content: systemPrompt },
           ...messages,
         ],
         temperature: 0.7,
-        max_tokens: 1000,
+        max_tokens: 2000,
       }),
     });
 
@@ -56,10 +84,15 @@ serve(async (req) => {
     }
 
     const data = await response.json();
+    console.log('AI response received successfully');
+
     const message = data.choices?.[0]?.message?.content || 'Sorry, I could not generate a response.';
 
     return new Response(
-      JSON.stringify({ message }),
+      JSON.stringify({ 
+        message,
+        agentMode: agentMode 
+      }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   } catch (error) {

@@ -198,15 +198,20 @@ const Index = () => {
                   </div>
                   <div>
                     <h1 className="text-lg font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                      Engineering Simulation IDE
+                      Agentic AI Engineering Suite
                     </h1>
-                    <p className="text-xs text-muted-foreground">FEA • CFD • Thermal Analysis</p>
+                    <p className="text-xs text-muted-foreground">Autonomous FEA • CFD • Thermal Optimization</p>
                   </div>
                 </div>
                 
-                <div className="flex items-center gap-2">
-                  <Sparkles className="w-5 h-5 text-primary animate-pulse" />
-                  <span className="text-sm text-muted-foreground">AI Ready</span>
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20">
+                    <Sparkles className="w-4 h-4 text-primary animate-pulse" />
+                    <span className="text-xs font-medium text-primary">Agent Active</span>
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    <span className="font-semibold text-foreground">NVIDIA-AWS Hackathon</span>
+                  </div>
                 </div>
               </div>
             </div>
