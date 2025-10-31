@@ -91,61 +91,64 @@ const AIChat = ({ codeContext }: AIChatProps) => {
   return (
     <div className="flex flex-col h-full bg-card border border-border rounded-lg overflow-hidden">
       {/* Header */}
-      <div className="flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-primary to-accent border-b border-border">
-        <Sparkles className="w-5 h-5 text-primary-foreground animate-pulse" />
-        <div className="flex-1">
-          <h2 className="font-semibold text-primary-foreground">Agentic AI</h2>
-          <p className="text-xs text-primary-foreground/80">Autonomous Engineering Agent</p>
+      <div className="flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-3 bg-gradient-to-r from-primary to-accent border-b border-border flex-shrink-0">
+        <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-primary-foreground animate-pulse flex-shrink-0" />
+        <div className="flex-1 min-w-0">
+          <h2 className="font-semibold text-primary-foreground text-sm sm:text-base">Agentic AI</h2>
+          <p className="text-xs text-primary-foreground/80 hidden sm:block">Autonomous Engineering Agent</p>
         </div>
-        <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-primary-foreground/20">
+        <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-primary-foreground/20 flex-shrink-0">
           <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-          <span className="text-xs text-primary-foreground">Active</span>
+          <span className="text-xs text-primary-foreground hidden sm:inline">Active</span>
         </div>
       </div>
 
       {/* Messages */}
-      <ScrollArea className="flex-1 p-4" ref={scrollRef}>
-        <div className="space-y-4">
+      <ScrollArea className="flex-1 p-3 sm:p-4" ref={scrollRef}>
+        <div className="space-y-3 sm:space-y-4">
           {messages.map((message, index) => (
             <div
               key={index}
-              className={`flex gap-3 ${
+              className={`flex gap-2 sm:gap-3 ${
                 message.role === "assistant" ? "items-start" : "items-start justify-end"
               }`}
             >
               {message.role === "assistant" && (
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center flex-shrink-0">
-                  <Bot className="w-5 h-5 text-primary-foreground" />
+                <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center flex-shrink-0">
+                  <Bot className="w-4 h-4 sm:w-5 sm:h-5 text-primary-foreground" />
                 </div>
               )}
               
               <div
-                className={`flex-1 max-w-[80%] rounded-lg p-3 ${
+                className={`flex-1 max-w-[85%] sm:max-w-[80%] rounded-lg p-2 sm:p-3 ${
                   message.role === "assistant"
                     ? "bg-muted text-foreground"
                     : "bg-gradient-to-r from-primary to-accent text-primary-foreground ml-auto"
                 }`}
               >
-                <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                <p className="text-xs sm:text-sm whitespace-pre-wrap break-words">{message.content}</p>
                 <span className="text-xs opacity-70 mt-1 block">
-                  {message.timestamp.toLocaleTimeString()}
+                  {message.timestamp.toLocaleTimeString([], { 
+                    hour: "2-digit", 
+                    minute: "2-digit" 
+                  })}
                 </span>
               </div>
               
               {message.role === "user" && (
-                <div className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center flex-shrink-0">
-                  <User className="w-5 h-5 text-secondary-foreground" />
+                <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg bg-secondary flex items-center justify-center flex-shrink-0">
+                  <User className="w-4 h-4 sm:w-5 sm:h-5 text-secondary-foreground" />
                 </div>
               )}
             </div>
           ))}
           
           {isLoading && (
-            <div className="flex gap-3 items-start">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                <Bot className="w-5 h-5 text-primary-foreground" />
+            <div className="flex gap-2 sm:gap-3 items-start">
+              <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center flex-shrink-0">
+                <Bot className="w-4 h-4 sm:w-5 sm:h-5 text-primary-foreground" />
               </div>
-              <div className="flex-1 rounded-lg p-3 bg-muted">
+              <div className="flex-1 rounded-lg p-2 sm:p-3 bg-muted">
                 <Loader2 className="w-4 h-4 animate-spin text-primary" />
               </div>
             </div>
@@ -154,21 +157,22 @@ const AIChat = ({ codeContext }: AIChatProps) => {
       </ScrollArea>
 
       {/* Input */}
-      <div className="p-4 border-t border-border bg-muted/50">
+      <div className="p-3 sm:p-4 border-t border-border bg-muted/50 flex-shrink-0">
         <div className="flex gap-2">
           <Textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="Ask me to analyze simulations, optimize parameters, or plan engineering workflows..."
-            className="resize-none bg-background border-border focus:ring-primary"
+            placeholder="Ask me to analyze simulations..."
+            className="resize-none bg-background border-border focus:ring-primary text-sm"
             rows={2}
             disabled={isLoading}
           />
           <Button
             onClick={sendMessage}
             disabled={!input.trim() || isLoading}
-            className="bg-gradient-to-r from-primary to-accent hover:opacity-90 self-end"
+            className="bg-gradient-to-r from-primary to-accent hover:opacity-90 self-end flex-shrink-0"
+            size="sm"
           >
             <Send className="w-4 h-4" />
           </Button>
@@ -179,3 +183,4 @@ const AIChat = ({ codeContext }: AIChatProps) => {
 };
 
 export default AIChat;
+
