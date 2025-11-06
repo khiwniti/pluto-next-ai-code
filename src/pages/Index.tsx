@@ -133,81 +133,20 @@ const Index = () => {
           </div>
         </header>
 
-        {/* Notebook Content */}
-        <div className="flex-1 overflow-y-auto">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
-            {/* Notebook Cells */}
-            <div className="space-y-6">
-              {cells.map((cell, index) => (
-                <div key={cell.id} className="group">
-                  {cell.type === "markdown" ? (
-                    <div className="prose prose-sm dark:prose-invert max-w-none">
-                      <div className="text-foreground">
-                        {cell.content.split("\n").map((line, i) => {
-                          if (line.startsWith("# ")) {
-                            return (
-                              <h1 key={i} className="text-2xl sm:text-3xl font-bold mt-4 sm:mt-6 mb-3 sm:mb-4">
-                                {line.substring(2)}
-                              </h1>
-                            );
-                          } else if (line.startsWith("## ")) {
-                            return (
-                              <h2 key={i} className="text-xl sm:text-2xl font-bold mt-4 sm:mt-5 mb-2 sm:mb-3">
-                                {line.substring(3)}
-                              </h2>
-                            );
-                          } else if (line.startsWith("### ")) {
-                            return (
-                              <h3 key={i} className="text-lg font-bold mt-3 sm:mt-4 mb-2">
-                                {line.substring(4)}
-                              </h3>
-                            );
-                          } else if (line.trim()) {
-                            return (
-                              <p key={i} className="text-sm sm:text-base text-foreground/80 mb-2">
-                                {line}
-                              </p>
-                            );
-                          }
-                          return null;
-                        })}
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="bg-card border border-border rounded-lg overflow-hidden">
-                      <div className="bg-muted/50 px-3 sm:px-4 py-2 border-b border-border flex items-center justify-between gap-2">
-                        <span className="text-xs font-medium text-muted-foreground">
-                          Cell {index + 1}
-                        </span>
-                        <div className="flex gap-1">
-                          <button className="p-1 hover:bg-background rounded transition-colors">
-                            <Code2 className="w-3 h-3 sm:w-4 sm:h-4 text-muted-foreground" />
-                          </button>
-                        </div>
-                      </div>
-                      <div className="p-3 sm:p-4 font-mono text-xs sm:text-sm bg-background text-foreground/80 overflow-x-auto">
-                        <pre className="whitespace-pre-wrap break-words">{cell.content}</pre>
-                      </div>
-                      {cell.output && (
-                        <div className="p-3 sm:p-4 border-t border-border bg-muted/30 font-mono text-xs sm:text-sm text-foreground/70">
-                          {cell.output}
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
+        {/* Main Content Area - Split into Code Editor and Visualization */}
+        <div className="flex-1 overflow-hidden flex flex-col">
+          {/* Code Editor Section */}
+          <div className="flex-1 min-h-0 border-b border-border">
+            <CodeEditor
+              onAnalyzeCode={handleAnalyzeCode}
+              onRunCode={handleRunCode}
+              onCodeChange={handleCodeChange}
+            />
+          </div>
 
-            {/* Add Cell Button */}
-            <div className="mt-8 flex justify-center">
-              <button
-                onClick={handleAddCell}
-                className="px-4 py-2 rounded-lg bg-primary/10 border border-primary/20 hover:bg-primary/20 transition-colors text-sm font-medium text-primary"
-              >
-                + Add Cell
-              </button>
-            </div>
+          {/* Visualization Panel Section */}
+          <div className="flex-1 min-h-0">
+            <VisualizationPanel code={currentCode} onExecute={handleRunCode} />
           </div>
         </div>
       </div>
