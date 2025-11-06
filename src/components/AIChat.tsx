@@ -20,7 +20,22 @@ const AIChat = ({ codeContext }: AIChatProps) => {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content: "🤖 Agentic AI Engineering Assistant initialized.\n\nI can autonomously:\n• Analyze FEA/CFD simulations\n• Optimize mesh configurations\n• Validate material properties\n• Suggest solver improvements\n• Execute multi-step engineering workflows\n\nHow can I assist with your simulation today?",
+      content: `🚀 **Agentic CFD/FEA Assistant Active**
+
+I specialize in:
+• **Julia/Pluto.jl** - Code analysis, debugging, optimization
+• **CFD Simulations** - Navier-Stokes, mesh generation, convergence
+• **FEA Analysis** - Stress analysis, modal analysis, materials
+• **Performance** - GPU acceleration, vectorization, parallelization
+• **Visualization** - PlotlyJS, 3D flow fields, pressure distributions
+
+**Quick Start:**
+- Click **"AI Analyze"** to send your Julia code for deep analysis
+- Ask: "Explain the Reynolds number calculation"
+- Ask: "How can I improve solver convergence?"
+- Ask: "Validate the CFL condition for stability"
+
+Ready to optimize your engineering simulation! 🔬`,
       timestamp: new Date(),
     },
   ]);
@@ -95,7 +110,7 @@ const AIChat = ({ codeContext }: AIChatProps) => {
         <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-primary-foreground animate-pulse flex-shrink-0" />
         <div className="flex-1 min-w-0">
           <h2 className="font-semibold text-primary-foreground text-sm sm:text-base">Agentic AI</h2>
-          <p className="text-xs text-primary-foreground/80 hidden sm:block">Autonomous Engineering Agent</p>
+          <p className="text-xs text-primary-foreground/80 hidden sm:block">Julia • CFD • FEA Expert</p>
         </div>
         <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-primary-foreground/20 flex-shrink-0">
           <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
@@ -163,7 +178,7 @@ const AIChat = ({ codeContext }: AIChatProps) => {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="Ask me to analyze simulations..."
+            placeholder="Ask about Julia, CFD, FEA, or optimization..."
             className="resize-none bg-background border-border focus:ring-primary text-sm"
             rows={2}
             disabled={isLoading}
